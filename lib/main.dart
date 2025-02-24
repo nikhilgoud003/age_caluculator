@@ -87,7 +87,7 @@ class MyHomePage extends StatelessWidget {
     } else {
       return {
         'message': "Golden years!",
-        'color': const Color.fromARGB(255, 209, 16, 16)
+        'color': const Color.fromARGB(255, 233, 5, 5)
       };
     }
   }
