@@ -65,7 +65,93 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      // home: const MyHomePage(),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+  Map<String, dynamic> _getAgeCategory(int age) {
+    if (age <= 12) {
+      return {'message': "You're a child!", 'color': Colors.lightBlueAccent};
+    } else if (age <= 19) {
+      return {'message': "Teenager time!", 'color': Colors.lightGreen};
+    } else if (age <= 35) {
+      return {
+        'message': "You're a young adult!",
+        'color': const Color.fromARGB(255, 204, 255, 0)
+      };
+    } else if (age <= 67) {
+      return {'message': "You're an adult now!", 'color': Colors.orange};
+    } else {
+      return {
+        'message': "Golden years!",
+        'color': const Color.fromARGB(255, 209, 16, 16)
+      };
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<Counter>(
+      builder: (context, counter, child) {
+        var ageCategory = _getAgeCategory(counter.value);
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Age Calculator App'),
+            backgroundColor: Colors.lightBlueAccent,
+          ),
+          backgroundColor: ageCategory['color'],
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'I am ${counter.value} years old',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  ageCategory['message'],
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                SizedBox(height: 20),
+                Slider(
+                  min: 0,
+                  max: 100,
+                  value: context.read<Counter>().value.toDouble(),
+                  onChanged: (double value) {
+                    var counter = context.read<Counter>();
+                    counter.setvalue(value);
+                  },
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        var counter = context.read<Counter>();
+                        counter.increment();
+                      },
+                      child: Text('Increase the age "+1"'),
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        var counter = context.read<Counter>();
+                        counter.decrement();
+                      },
+                      child: Text('Reduce the age "-1"'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
